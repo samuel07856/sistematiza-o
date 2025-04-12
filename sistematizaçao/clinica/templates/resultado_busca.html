@@ -1,0 +1,59 @@
+{% extends "homepage.html" %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Resultados da Busca</h2>
+
+    {% if agendamentos %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Paciente</th>
+                    <th>Médico</th>
+                    <th>Especialidade</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ag in agendamentos %}
+                <tr>
+                    <td>{{ ag.paciente.nome }}</td>
+                    <td>{{ ag.medico.nome }}</td>
+                    <td>{{ ag.medico.especialidade }}</td>
+                    <td>{{ ag.data.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        <span class="badge bg-{% if ag.status.name == 'AGENDADO' %}success{% elif ag.status.name == 'CANCELADO' %}danger{% else %}secondary{% endif %}">
+                            {{ ag.status.value }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if ag.status == StatusAgendamento.AGENDADO %}
+                        <form method="post" action="{{ url_for('cancelar_agendamento', id=ag.id) }}" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja cancelar este agendamento?')">
+                                Cancelar
+                            </button>
+                        </form>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center">
+        Nenhum agendamento encontrado.
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-3">
+        <a href="{{ url_for('perfil') }}" class="btn btn-secondary">Voltar</a>
+    </div>
+</div>
+{% endblock %}
+

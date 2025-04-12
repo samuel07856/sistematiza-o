@@ -1,0 +1,89 @@
+{% extends "homepage.html" %}
+
+{% block titulo %}
+Perfil do Usuário
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+
+  <div class="text-center mb-4">
+    <h1>Bem-vindo, {{ usuario.nome }}!</h1>
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary mt-3">Sair</a>
+  </div>
+
+  <div class="row">
+
+    <!-- Agendamento -->
+    <div class="col-md-6">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Agendar Consulta</h4>
+
+          <form method="POST" action="{{ url_for('criar_agendamento') }}">
+            <div class="mb-3">
+              <label for="especialidade" class="form-label">Especialidade</label>
+              <select id="especialidade" name="especialidade" class="form-select" required>
+                <option value="">Selecione</option>
+                {% for esp in especialidades %}
+                  <option value="{{ esp }}">{{ esp }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="medico_id" class="form-label">Médico</label>
+              <select id="medico_id" name="medico_id" class="form-select" required>
+                <option value="">Selecione a especialidade primeiro</option>
+                {% for medico in medicos %}
+                  <option value="{{ medico.id }}" data-especialidade="{{ medico.especialidade }}">{{ medico.nome }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="data" class="form-label">Data e Hora</label>
+              <input type="datetime-local" name="data" id="data" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-success">Agendar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buscar CPF -->
+    <div class="col-md-6">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Buscar Agendamentos por CPF</h4>
+          <form method="POST" action="{{ url_for('buscar_agendamentos') }}">
+            <div class="mb-3">
+              <input type="text" name="cpf" placeholder="Digite o CPF" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Script para filtrar médicos pela especialidade -->
+<script>
+  const especialidadeSelect = document.getElementById("especialidade");
+  const medicoSelect = document.getElementById("medico_id");
+
+  especialidadeSelect.addEventListener("change", function () {
+    const especialidadeSelecionada = this.value;
+
+    for (let option of medicoSelect.options) {
+      const esp = option.getAttribute("data-especialidade");
+      option.style.display = (!esp || esp === especialidadeSelecionada) ? "block" : "none";
+    }
+
+    medicoSelect.value = "";
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,34 @@
+body {
+    background-color: #e6f2ff;
+    color: #2d3436;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar, footer {
+    background-color: #58B3AC;
+}
+
+.navbar-saude-total {
+    background-color: #58B3AC !important;
+}
+
+.btn-primary {
+    background-color: #58B3AC;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #4CA29B;
+}
+
+a {
+    color: #58B3AC;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #4CA29B;
+    text-decoration: underline;
+}
+
+  
